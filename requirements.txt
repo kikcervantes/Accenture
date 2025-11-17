@@ -1,0 +1,8 @@
+streamlit
+pandas
+PyMuPDF # Sustituye 'fitz'
+fpdf
+rapidfuzz
+yfinance
+requests
+plotly
