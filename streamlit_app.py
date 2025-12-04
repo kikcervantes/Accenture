@@ -126,8 +126,216 @@ st.markdown("""
         background-color: #8A00E6;
         color: white;
     }
+    .good-ratio {
+        color: #28a745 !important;
+        font-weight: 700 !important;
+    }
+    .bad-ratio {
+        color: #dc3545 !important;
+        font-weight: 700 !important;
+    }
+    .neutral-ratio {
+        color: #6c757d !important;
+        font-weight: 700 !important;
+    }
+    .ratio-card {
+        padding: 15px;
+        border-radius: 8px;
+        background-color: white;
+        border-left: 5px solid;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .ratio-good {
+        border-left-color: #28a745;
+        background-color: #f8fff9;
+    }
+    .ratio-bad {
+        border-left-color: #dc3545;
+        background-color: #fff8f9;
+    }
+    .ratio-neutral {
+        border-left-color: #6c757d;
+        background-color: #f8f9fa;
+    }
+    .ratio-name {
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+    .ratio-value {
+        font-size: 22px;
+        font-weight: 700;
+    }
 </style>
 """, unsafe_allow_html=True)
+
+# ----------------------------- RATIO COLOR CODING -----------------------------
+
+def get_ratio_color(ratio_name, ratio_value):
+    """
+    Determine if a ratio is good (green) or bad (red) based on standard benchmarks.
+    Returns CSS class name for styling.
+    """
+    if pd.isna(ratio_value) or ratio_value is None:
+        return "neutral-ratio"
+    
+    ratio_name_lower = ratio_name.lower()
+    
+    # Current Ratio: Good if > 1.5, Warning if < 1.0, Neutral between
+    if "current ratio" in ratio_name_lower:
+        if ratio_value >= 1.5:
+            return "good-ratio"
+        elif ratio_value < 1.0:
+            return "bad-ratio"
+        else:
+            return "neutral-ratio"
+    
+    # Quick Ratio: Good if > 1.0, Warning if < 0.5
+    elif "quick ratio" in ratio_name_lower:
+        if ratio_value >= 1.0:
+            return "good-ratio"
+        elif ratio_value < 0.5:
+            return "bad-ratio"
+        else:
+            return "neutral-ratio"
+    
+    # Debt to Equity: Good if < 1.0, Warning if > 2.0
+    elif "debt to equity" in ratio_name_lower:
+        if ratio_value <= 1.0:
+            return "good-ratio"
+        elif ratio_value > 2.0:
+            return "bad-ratio"
+        else:
+            return "neutral-ratio"
+    
+    # Return on Equity (ROE): Good if > 0.15, Bad if < 0.05
+    elif "roe" in ratio_name_lower or "return on equity" in ratio_name_lower:
+        if ratio_value >= 0.15:
+            return "good-ratio"
+        elif ratio_value < 0.05:
+            return "bad-ratio"
+        else:
+            return "neutral-ratio"
+    
+    # Return on Assets (ROA): Good if > 0.05, Bad if < 0.01
+    elif "roa" in ratio_name_lower or "return on assets" in ratio_name_lower:
+        if ratio_value >= 0.05:
+            return "good-ratio"
+        elif ratio_value < 0.01:
+            return "bad-ratio"
+        else:
+            return "neutral-ratio"
+    
+    # Gross Profit Margin: Good if > 0.40, Bad if < 0.20
+    elif "gross profit margin" in ratio_name_lower:
+        if ratio_value >= 0.40:
+            return "good-ratio"
+        elif ratio_value < 0.20:
+            return "bad-ratio"
+        else:
+            return "neutral-ratio"
+    
+    # Net Profit Margin: Good if > 0.10, Bad if < 0.05
+    elif "net profit margin" in ratio_name_lower:
+        if ratio_value >= 0.10:
+            return "good-ratio"
+        elif ratio_value < 0.05:
+            return "bad-ratio"
+        else:
+            return "neutral-ratio"
+    
+    # Asset Turnover: Good if > 1.0, Bad if < 0.5
+    elif "asset turnover" in ratio_name_lower:
+        if ratio_value >= 1.0:
+            return "good-ratio"
+        elif ratio_value < 0.5:
+            return "bad-ratio"
+        else:
+            return "neutral-ratio"
+    
+    return "neutral-ratio"
+
+def get_ratio_card_class(ratio_name, ratio_value):
+    """Get the CSS class for ratio card styling"""
+    if pd.isna(ratio_value) or ratio_value is None:
+        return "ratio-neutral"
+    
+    ratio_name_lower = ratio_name.lower()
+    
+    # Current Ratio: Good if > 1.5, Warning if < 1.0, Neutral between
+    if "current ratio" in ratio_name_lower:
+        if ratio_value >= 1.5:
+            return "ratio-good"
+        elif ratio_value < 1.0:
+            return "ratio-bad"
+        else:
+            return "ratio-neutral"
+    
+    # Quick Ratio: Good if > 1.0, Warning if < 0.5
+    elif "quick ratio" in ratio_name_lower:
+        if ratio_value >= 1.0:
+            return "ratio-good"
+        elif ratio_value < 0.5:
+            return "ratio-bad"
+        else:
+            return "ratio-neutral"
+    
+    # Debt to Equity: Good if < 1.0, Warning if > 2.0
+    elif "debt to equity" in ratio_name_lower:
+        if ratio_value <= 1.0:
+            return "ratio-good"
+        elif ratio_value > 2.0:
+            return "ratio-bad"
+        else:
+            return "ratio-neutral"
+    
+    # Return on Equity (ROE): Good if > 0.15, Bad if < 0.05
+    elif "roe" in ratio_name_lower or "return on equity" in ratio_name_lower:
+        if ratio_value >= 0.15:
+            return "ratio-good"
+        elif ratio_value < 0.05:
+            return "ratio-bad"
+        else:
+            return "ratio-neutral"
+    
+    # Return on Assets (ROA): Good if > 0.05, Bad if < 0.01
+    elif "roa" in ratio_name_lower or "return on assets" in ratio_name_lower:
+        if ratio_value >= 0.05:
+            return "ratio-good"
+        elif ratio_value < 0.01:
+            return "ratio-bad"
+        else:
+            return "ratio-neutral"
+    
+    # Gross Profit Margin: Good if > 0.40, Bad if < 0.20
+    elif "gross profit margin" in ratio_name_lower:
+        if ratio_value >= 0.40:
+            return "ratio-good"
+        elif ratio_value < 0.20:
+            return "ratio-bad"
+        else:
+            return "ratio-neutral"
+    
+    # Net Profit Margin: Good if > 0.10, Bad if < 0.05
+    elif "net profit margin" in ratio_name_lower:
+        if ratio_value >= 0.10:
+            return "ratio-good"
+        elif ratio_value < 0.05:
+            return "ratio-bad"
+        else:
+            return "ratio-neutral"
+    
+    # Asset Turnover: Good if > 1.0, Bad if < 0.5
+    elif "asset turnover" in ratio_name_lower:
+        if ratio_value >= 1.0:
+            return "ratio-good"
+        elif ratio_value < 0.5:
+            return "ratio-bad"
+        else:
+            return "ratio-neutral"
+    
+    return "ratio-neutral"
 
 # ----------------------------- IMPROVED NEWS API INTEGRATION -----------------------------
 
@@ -1464,7 +1672,10 @@ def main():
                 if not current_ratio.empty:
                     latest_ratio = current_ratio[years[0]].iloc[0] if pd.notna(current_ratio[years[0]].iloc[0]) else current_ratio[years[1]].iloc[0]
                     if pd.notna(latest_ratio):
-                        st.metric("Current Ratio", f"{latest_ratio:.2f}")
+                        # Apply color coding to the metric
+                        color_class = get_ratio_color('Current Ratio', latest_ratio)
+                        st.markdown(f'<div class="{color_class}" style="font-size: 24px; font-weight: bold;">{latest_ratio:.2f}</div>', unsafe_allow_html=True)
+                        st.markdown('<div style="font-size: 12px; color: #666;">Current Ratio</div>', unsafe_allow_html=True)
                     else:
                         st.metric("Current Ratio", "N/A")
                 st.markdown('</div>', unsafe_allow_html=True)
@@ -1513,7 +1724,110 @@ def main():
 
             with tab4:
                 st.subheader("Financial Ratios")
-                st.dataframe(ratios_df, use_container_width=True, hide_index=True)
+                
+                # Add explanation of color coding
+                st.markdown("""
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <div style="flex: 1; padding: 10px; background-color: #d4edda; border-radius: 5px; text-align: center; border: 1px solid #c3e6cb;">
+                        <strong style="color: #155724;">🟢 Good Ratio</strong>
+                    </div>
+                    <div style="flex: 1; padding: 10px; background-color: #f8d7da; border-radius: 5px; text-align: center; border: 1px solid #f5c6cb;">
+                        <strong style="color: #721c24;">🔴 Bad Ratio</strong>
+                    </div>
+                    <div style="flex: 1; padding: 10px; background-color: #e2e3e5; border-radius: 5px; text-align: center; border: 1px solid #d6d8db;">
+                        <strong style="color: #383d41;">⚪ Neutral Ratio</strong>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # Display ratios with colored metrics for each year
+                for year_idx, year in enumerate(years):
+                    st.markdown(f"### Year {year}")
+                    
+                    # Create columns for the ratios
+                    col1, col2 = st.columns(2)
+                    
+                    # Track which column to use
+                    col_idx = 0
+                    
+                    for idx, row in ratios_df.iterrows():
+                        ratio_name = row['Ratios']
+                        ratio_value = row[year]
+                        
+                        if pd.isna(ratio_value):
+                            continue
+                        
+                        # Get the color class for card styling
+                        card_class = get_ratio_card_class(ratio_name, ratio_value)
+                        color_class = get_ratio_color(ratio_name, ratio_value)
+                        
+                        # Create the ratio card HTML
+                        ratio_card = f"""
+                        <div class="ratio-card {card_class}">
+                            <div class="ratio-name">{ratio_name}</div>
+                            <div class="ratio-value {color_class}">{ratio_value:.3f}</div>
+                        </div>
+                        """
+                        
+                        # Alternate between columns
+                        if col_idx % 2 == 0:
+                            with col1:
+                                st.markdown(ratio_card, unsafe_allow_html=True)
+                        else:
+                            with col2:
+                                st.markdown(ratio_card, unsafe_allow_html=True)
+                        
+                        col_idx += 1
+                    
+                    # Add spacing between years
+                    if year_idx < len(years) - 1:
+                        st.markdown("<br>", unsafe_allow_html=True)
+                
+                # Add ratio interpretation guide
+                with st.expander("📊 Ratio Interpretation Guide"):
+                    st.markdown("""
+                    **Current Ratio:**
+                    - 🟢 **Good:** > 1.5 (Strong liquidity)
+                    - ⚪ **Neutral:** 1.0 - 1.5 (Adequate liquidity)
+                    - 🔴 **Bad:** < 1.0 (Potential liquidity issues)
+                    
+                    **Quick Ratio:**
+                    - 🟢 **Good:** > 1.0 (Strong immediate liquidity)
+                    - ⚪ **Neutral:** 0.5 - 1.0 (Moderate liquidity)
+                    - 🔴 **Bad:** < 0.5 (Poor immediate liquidity)
+                    
+                    **Debt to Equity Ratio:**
+                    - 🟢 **Good:** < 1.0 (Conservative debt levels)
+                    - ⚪ **Neutral:** 1.0 - 2.0 (Moderate debt)
+                    - 🔴 **Bad:** > 2.0 (High debt risk)
+                    
+                    **Return on Equity (ROE):**
+                    - 🟢 **Good:** > 15% (Excellent profitability)
+                    - ⚪ **Neutral:** 5% - 15% (Average profitability)
+                    - 🔴 **Bad:** < 5% (Poor profitability)
+                    
+                    **Return on Assets (ROA):**
+                    - 🟢 **Good:** > 5% (Efficient asset use)
+                    - ⚪ **Neutral:** 1% - 5% (Average efficiency)
+                    - 🔴 **Bad:** < 1% (Poor asset efficiency)
+                    
+                    **Net Profit Margin:**
+                    - 🟢 **Good:** > 10% (High profitability)
+                    - ⚪ **Neutral:** 5% - 10% (Moderate profitability)
+                    - 🔴 **Bad:** < 5% (Low profitability)
+                    
+                    **Gross Profit Margin:**
+                    - 🟢 **Good:** > 40% (High gross profitability)
+                    - ⚪ **Neutral:** 20% - 40% (Average gross profitability)
+                    - 🔴 **Bad:** < 20% (Low gross profitability)
+                    
+                    **Asset Turnover:**
+                    - 🟢 **Good:** > 1.0 (Efficient asset utilization)
+                    - ⚪ **Neutral:** 0.5 - 1.0 (Moderate asset utilization)
+                    - 🔴 **Bad:** < 0.5 (Poor asset utilization)
+                    
+                    *Note: Benchmarks may vary by industry.*
+                    """)
 
             with tab5:
                 st.subheader("Financial Performance Charts")
@@ -1602,6 +1916,15 @@ def main():
                     pdf.add_page()
                     
                     pdf.section_title("Financial Analysis Report")
+                    pdf.ln(5)
+                    
+                    # Add color coding legend to PDF
+                    pdf.set_font("Arial", "B", 10)
+                    pdf.cell(0, 8, "Financial Ratios Legend:", ln=True)
+                    pdf.set_font("Arial", "", 9)
+                    pdf.cell(0, 6, "Green (> Good): Strong performance", ln=True)
+                    pdf.cell(0, 6, "Red (< Bad): Needs improvement", ln=True)
+                    pdf.cell(0, 6, "Gray (Neutral): Within acceptable range", ln=True)
                     pdf.ln(5)
                     
                     # Company Information
