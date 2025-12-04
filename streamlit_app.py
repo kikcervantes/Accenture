@@ -1465,25 +1465,30 @@ def create_download_link(pdf_path, filename):
 # ----------------------------- MAIN APPLICATION -----------------------------
 
 def main():
-    # Header section - Solo tus 3 imágenes
-    col1, col2, col3, col4 = st.columns([3, 1, 1, 1])
+    # Header con 6 imágenes reales
+    col1, col2, col3, col4 = st.columns([3, 2, 2, 1])
 
     with col1:
         st.markdown('<div class="main-header">Financial Analysis Platform</div>', unsafe_allow_html=True)
         st.markdown('<div class="sub-header">Professional Financial Statement Analysis</div>', unsafe_allow_html=True)
 
     with col2:
-        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Enrique.jpg", width=150, caption="Enrique")
+        st.markdown("**Team Members**")
+        # Tus 3 imágenes actuales
+        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Enrique.jpg", width=70)
+        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Helene.jpg", width=70)
+        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Omar.jpg", width=70)
 
     with col3:
-        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Helene.jpg", width=150, caption="Helene")
+        st.markdown("**Expertise Areas**")
+        # 3 imágenes que puedes subir
+        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Finance.jpg", width=70)
+        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Analytics.jpg", width=70)
+        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Risk.jpg", width=70)
 
     with col4:
-        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Omar.jpg", width=150, caption="Omar")
+        st.image("https://www.accenture.com/content/dam/accenture/final/accenture-com/logo/Accenture-Logo.png", width=150)
     
-        # Logo Accenture debajo
-        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Accenture.png", width=150)
-
     st.markdown("---")
 
     # Upload section in main area
