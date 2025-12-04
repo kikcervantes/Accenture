@@ -1473,16 +1473,16 @@ def main():
         st.markdown('<div class="sub-header">Professional Financial Statement Analysis</div>', unsafe_allow_html=True)
 
     with col2:
-        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Enrique.jpg", width=80, caption="Enrique")
+        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Enrique.jpg", width=120, caption="Enrique")
 
     with col3:
-        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Helene.jpg", width=80, caption="Helene")
+        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Helene.jpg", width=120, caption="Helene")
 
     with col4:
-        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Omar.jpg", width=80, caption="Omar")
+        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Omar.jpg", width=120, caption="Omar")
     
         # Logo Accenture debajo
-        st.image("https://www.accenture.com/content/dam/accenture/final/accenture-com/logo/Accenture-Logo.png", width=150)
+        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Accenture.jpg", width=150)
 
     st.markdown("---")
 
