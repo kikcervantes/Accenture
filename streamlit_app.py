@@ -1475,16 +1475,15 @@ def main():
     with col2:
         st.markdown("**Team Members**")
         # Tus 3 imágenes actuales
-        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Enrique.jpg", width=70)
-        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Helene.jpg", width=70)
-        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Omar.jpg", width=70)
+        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Enrique.jpg", width=150)
+        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Helene.jpg", width=150)
+        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Omar.jpg", width=150)
 
     with col3:
         st.markdown("**Expertise Areas**")
         # 3 imágenes que puedes subir
-        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Finance.jpg", width=70)
-        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Analytics.jpg", width=70)
-        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Risk.jpg", width=70)
+        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Gregoire.jpg", width=150)
+        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Koen.jpg", width=150)
 
     with col4:
         st.image("https://www.accenture.com/content/dam/accenture/final/accenture-com/logo/Accenture-Logo.png", width=150)
