@@ -1465,13 +1465,31 @@ def create_download_link(pdf_path, filename):
 # ----------------------------- MAIN APPLICATION -----------------------------
 
 def main():
-    # Header section
-    col1, col2 = st.columns([3, 1])
-    with col1:
-        st.markdown('<div class="main-header">Financial Analysis Platform</div>', unsafe_allow_html=True)
-        st.markdown('<div class="sub-header">Professional Financial Statement Analysis</div>', unsafe_allow_html=True)
-    with col2:
-        st.image("https://www.accenture.com/content/dam/accenture/final/accenture-com/logo/Accenture-Logo.png", width=150)
+    # Header section - Solo tus 3 imágenes
+col1, col2, col3, col4 = st.columns([3, 1, 1, 1])
+
+with col1:
+    st.markdown('<div class="main-header">Financial Analysis Platform</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">Professional Financial Statement Analysis</div>', unsafe_allow_html=True)
+
+with col2:
+    st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Enrique.jpg", 
+             width=80, 
+             caption="Enrique")
+
+with col3:
+    st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Helene.jpg", 
+             width=80, 
+             caption="Helene")
+
+with col4:
+    st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Omar.jpg", 
+             width=80, 
+             caption="Omar")
+    
+    # Logo Accenture debajo
+    st.image("https://www.accenture.com/content/dam/accenture/final/accenture-com/logo/Accenture-Logo.png", 
+             width=150)
 
     st.markdown("---")
 
