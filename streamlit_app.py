@@ -1486,7 +1486,7 @@ def main():
         st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Koen.jpg", width=150)
 
     with col4:
-        st.image("https://www.accenture.com/content/dam/accenture/final/accenture-com/logo/Accenture-Logo.png", width=150)
+        st.image("https://raw.githubusercontent.com/kikcervantes/Accenture/main/Accenture.png", width=150)
     
     st.markdown("---")
 
