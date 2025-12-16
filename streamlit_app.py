@@ -932,71 +932,101 @@ def find_company_ticker(company_name):
     return None
 
 def get_yahoo_finance_data(ticker, company_name):
-    """Extract financial data from Yahoo Finance"""
-    try:
-        stock = yf.Ticker(ticker)
-        info = stock.info
-        
-        # Get financial statements
-        balance_sheet = stock.balance_sheet
-        income_stmt = stock.income_stmt
-        cash_flow = stock.cashflow
-        
-        if balance_sheet.empty or income_stmt.empty:
-            st.error(f"❌ No financial data found for {ticker}")
-            return None, None, None, None, None
-        
-        # Get the two most recent years
-        years = balance_sheet.columns[:2].strftime('%Y').tolist()
-        
-        # Extract Balance Sheet data
-        balance_data = {
-            "Current Assets": extract_financial_value(balance_sheet, ["Current Assets", "Total Current Assets"]),
-            "Fixed Assets": extract_financial_value(balance_sheet, ["Non Current Assets", "Property Plant Equipment Net", "Net PPE"]),
-            "Total Assets": extract_financial_value(balance_sheet, ["Total Assets"]),
-            "Current Liabilities": extract_financial_value(balance_sheet, ["Current Liabilities", "Total Current Liabilities"]),
-            "Long-Term Liabilities": extract_financial_value(balance_sheet, ["Non Current Liabilities", "Long Term Debt"]),
-            "Equity": extract_financial_value(balance_sheet, ["Stockholders Equity", "Total Equity"])
-        }
-        
-        # Extract Profit & Loss data
-        profit_loss_data = {
-            "Revenue": extract_financial_value(income_stmt, ["Total Revenue", "Revenue"]),
-            "Operating profit": extract_financial_value(income_stmt, ["Operating Income", "Operating Profit"]),
-            "Net finance expenses": extract_financial_value(income_stmt, ["Interest Expense", "Net Interest Income"]),
-            "Profit before income tax": extract_financial_value(income_stmt, ["Pretax Income", "Income Before Tax"]),
-            "Income tax expense": extract_financial_value(income_stmt, ["Tax Provision", "Income Tax Expense"]),
-            "Profit for the year": extract_financial_value(income_stmt, ["Net Income", "Net Income From Continuing Operations"])
-        }
-        
-        # Extract Cash Flow data
-        cash_flow_data = {
-            "Cash flow from operating activities": extract_financial_value(cash_flow, ["Operating Cash Flow", "Cash From Operating Activities"]),
-            "Cash flow used in investing activities": extract_financial_value(cash_flow, ["Investing Cash Flow", "Cash From Investing Activities"]),
-            "Cash flows from financing activities": extract_financial_value(cash_flow, ["Financing Cash Flow", "Cash From Financing Activities"]),
-            "Cash and cash equivalents": extract_financial_value(balance_sheet, ["Cash And Cash Equivalents", "Cash"])
-        }
-        
-        # Create DataFrames
-        bc_df = create_financial_df(balance_data, years, "Balance Sheet")
-        pl_df = create_financial_df(profit_loss_data, years, "Profit & Loss")
-        cash_df = create_financial_df(cash_flow_data, years, "Cash Flow")
-        
-        # Get company info
-        company_info = {
-            "Company Name": info.get('longName', company_name),
-            "Sector": info.get('sector', 'N/A'),
-            "Industry": info.get('industry', 'N/A'),
-            "Market Cap": f"${info.get('marketCap', 0):,}" if info.get('marketCap') else 'N/A',
-            "Country": info.get('country', 'N/A'),
-            "Currency": info.get('currency', 'USD')
-        }
-        
-        return bc_df, pl_df, cash_df, pd.DataFrame(list(company_info.items()), columns=["Field", "Value"]), years
-        
-    except Exception as e:
-        st.error(f"❌ Error fetching data from Yahoo Finance: {str(e)}")
-        return None, None, None, None, None
+    """Extract financial data from Yahoo Finance with rate limiting"""
+    max_retries = 3
+    retry_delay = 5  # seconds
+    
+    for attempt in range(max_retries):
+        try:
+            # Add random delay between requests
+            time.sleep(random.uniform(1, 3))
+            
+            stock = yf.Ticker(ticker)
+            
+            # Add delay before getting info
+            time.sleep(random.uniform(0.5, 1.5))
+            info = stock.info
+            
+            # Add delays between each data fetch
+            time.sleep(random.uniform(0.5, 1))
+            balance_sheet = stock.balance_sheet
+            
+            time.sleep(random.uniform(0.5, 1))
+            income_stmt = stock.income_stmt
+            
+            time.sleep(random.uniform(0.5, 1))
+            cash_flow = stock.cashflow
+            
+            if balance_sheet.empty or income_stmt.empty:
+                st.error(f"❌ No financial data found for {ticker}")
+                return None, None, None, None, None
+            
+            # Get the two most recent years
+            years = balance_sheet.columns[:2].strftime('%Y').tolist()
+            
+            # Extract Balance Sheet data
+            balance_data = {
+                "Current Assets": extract_financial_value(balance_sheet, ["Current Assets", "Total Current Assets"]),
+                "Fixed Assets": extract_financial_value(balance_sheet, ["Non Current Assets", "Property Plant Equipment Net", "Net PPE"]),
+                "Total Assets": extract_financial_value(balance_sheet, ["Total Assets"]),
+                "Current Liabilities": extract_financial_value(balance_sheet, ["Current Liabilities", "Total Current Liabilities"]),
+                "Long-Term Liabilities": extract_financial_value(balance_sheet, ["Non Current Liabilities", "Long Term Debt"]),
+                "Equity": extract_financial_value(balance_sheet, ["Stockholders Equity", "Total Equity"])
+            }
+            
+            # Extract Profit & Loss data
+            profit_loss_data = {
+                "Revenue": extract_financial_value(income_stmt, ["Total Revenue", "Revenue"]),
+                "Operating profit": extract_financial_value(income_stmt, ["Operating Income", "Operating Profit"]),
+                "Net finance expenses": extract_financial_value(income_stmt, ["Interest Expense", "Net Interest Income"]),
+                "Profit before income tax": extract_financial_value(income_stmt, ["Pretax Income", "Income Before Tax"]),
+                "Income tax expense": extract_financial_value(income_stmt, ["Tax Provision", "Income Tax Expense"]),
+                "Profit for the year": extract_financial_value(income_stmt, ["Net Income", "Net Income From Continuing Operations"])
+            }
+            
+            # Extract Cash Flow data
+            cash_flow_data = {
+                "Cash flow from operating activities": extract_financial_value(cash_flow, ["Operating Cash Flow", "Cash From Operating Activities"]),
+                "Cash flow used in investing activities": extract_financial_value(cash_flow, ["Investing Cash Flow", "Cash From Investing Activities"]),
+                "Cash flows from financing activities": extract_financial_value(cash_flow, ["Financing Cash Flow", "Cash From Financing Activities"]),
+                "Cash and cash equivalents": extract_financial_value(balance_sheet, ["Cash And Cash Equivalents", "Cash"])
+            }
+            
+            # Create DataFrames
+            bc_df = create_financial_df(balance_data, years, "Balance Sheet")
+            pl_df = create_financial_df(profit_loss_data, years, "Profit & Loss")
+            cash_df = create_financial_df(cash_flow_data, years, "Cash Flow")
+            
+            # Get company info
+            company_info = {
+                "Company Name": info.get('longName', company_name),
+                "Sector": info.get('sector', 'N/A'),
+                "Industry": info.get('industry', 'N/A'),
+                "Market Cap": f"${info.get('marketCap', 0):,}" if info.get('marketCap') else 'N/A',
+                "Country": info.get('country', 'N/A'),
+                "Currency": info.get('currency', 'USD')
+            }
+            
+            return bc_df, pl_df, cash_df, pd.DataFrame(list(company_info.items()), columns=["Field", "Value"]), years
+            
+        except Exception as e:
+            error_msg = str(e).lower()
+            
+            if "too many" in error_msg or "rate" in error_msg or "429" in error_msg:
+                st.warning(f"⚠️ Rate limited by Yahoo Finance. Retry {attempt + 1}/{max_retries} in {retry_delay} seconds...")
+                
+                # Exponential backoff
+                wait_time = retry_delay * (2 ** attempt) + random.uniform(1, 3)
+                time.sleep(wait_time)
+                
+                if attempt == max_retries - 1:
+                    st.error("❌ Yahoo Finance rate limit reached. Please try again later.")
+                    return None, None, None, None, None
+            else:
+                st.error(f"❌ Error fetching data from Yahoo Finance: {str(e)}")
+                return None, None, None, None, None
+    
+    return None, None, None, None, None
 
 def extract_financial_value(financial_stmt, possible_keys):
     """Extract financial values using multiple possible keys"""
